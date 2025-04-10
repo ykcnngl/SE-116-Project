@@ -3,16 +3,19 @@ import java.time.format.DateTimeFormatter;
 
 public class Main {
     public static void main(String[] args) {
-        // Sürüm numarası
+
+        // VERSION NO
         String versionNo = "FSM v1.0.0";
 
-        // Şu anki tarih ve saat
+        // DATE TIME
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy HH:mm");
         String formattedDateTime = now.format(formatter);
 
-        System.out.println("FSM VERSION" + versionNo + " " + formattedDateTime);
-
+        System.out.println("FSM VERSION: " + versionNo + " " + formattedDateTime);
+        System.out.println("?");
 
     }
+    
+
 }
