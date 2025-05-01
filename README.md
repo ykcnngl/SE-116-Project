@@ -1,2 +1,2 @@
 # SE-116-Project
-VERSION: FSM v1.0.0 
+VERSION: FSM v2.0.0 
