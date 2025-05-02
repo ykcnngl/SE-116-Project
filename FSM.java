@@ -112,7 +112,7 @@ public class FSM implements Serializable {
             return;
         }
 
-        // Eğer aynı symbol ve currentState varsa öncekiyi kaldır
+        // Eğer aynı symbol ve currentState varsa öncekini kaldır
         String finalSymbol = symbol;
         String finalCurrentState = currentState;
         for (int i = 0; i < transitions.size(); i++) {
