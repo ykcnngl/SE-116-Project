@@ -3,6 +3,7 @@ package fsm.core;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+
 public class FSM implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -20,5 +21,108 @@ public class FSM implements Serializable {
         finalStates.clear();
         transitions.clear();
         initialState = null;
+    }
+
+    public void addSymbol(String symbol) {
+        if (symbol == null || symbol.isEmpty()) {
+            System.out.println("Error: Symbol cannot be null or empty.");
+            return;
+        }
+        symbol = symbol.toUpperCase();
+        if (!symbol.matches("[A-Z0-9]")) {
+            System.out.println("Error: Symbol '" + symbol + "' is not alphanumeric and ignored.");
+            return;
+        }
+        if (symbols.contains(symbol)) {
+            System.out.println("Warning: Symbol '" + symbol + "' was already declared.");
+        } else {
+            symbols.add(symbol);
+        }
+    }
+
+    public void addState(String state) {
+        if (state == null || state.isEmpty()) {
+            System.out.println("Error: State cannot be null or empty.");
+            return;
+        }
+        state = state.toUpperCase();
+        if (!state.matches("[A-Z0-9]+")) {
+            System.out.println("Error: State '" + state + "' is not alphanumeric and ignored.");
+            return;
+        }
+        if (states.contains(state)) {
+            System.out.println("Warning: State '" + state + "' was already declared.");
+        } else {
+            states.add(state);
+            if (initialState == null) {
+                initialState = state;
+            }
+        }
+    }
+
+    public void setInitialState(String state) {
+        if (state == null || state.isEmpty()) {
+            System.out.println("Error: No initial state specified.");
+            return;
+        }
+        state = state.toUpperCase();
+        if (!states.contains(state)) {
+            System.out.println("Warning: State '" + state + "' was not previously declared. Adding it now.");
+            states.add(state);
+        }
+        initialState = state;
+    }
+
+    public void addFinalState(String state) {
+        if (state == null || state.isEmpty()) {
+            System.out.println("Error: No final state specified.");
+            return;
+        }
+        state = state.toUpperCase();
+        if (!states.contains(state)) {
+            System.out.println("Warning: State '" + state + "' was not previously declared. Adding it now.");
+            states.add(state);
+        }
+        if (finalStates.contains(state)) {
+            System.out.println("Warning: State '" + state + "' was already declared as a final state.");
+        } else {
+            finalStates.add(state);
+        }
+    }
+
+    public void addTransition(String symbol, String currentState, String nextState) {
+        if (symbol == null || currentState == null || nextState == null) {
+            System.out.println("Error: Symbol and states must not be null.");
+            return;
+        }
+        symbol = symbol.toUpperCase();
+        currentState = currentState.toUpperCase();
+        nextState = nextState.toUpperCase();
+
+        if (!symbols.contains(symbol)) {
+            System.out.println("Error: Invalid symbol '" + symbol + "'. It was not previously declared.");
+            return;
+        }
+        if (!states.contains(currentState)) {
+            System.out.println("Error: Invalid current state '" + currentState + "'. It was not previously declared.");
+            return;
+        }
+        if (!states.contains(nextState)) {
+            System.out.println("Error: Invalid next state '" + nextState + "'. It was not previously declared.");
+            return;
+        }
+
+        // Eğer aynı symbol ve currentState varsa öncekiyi kaldır
+        String finalSymbol = symbol;
+        String finalCurrentState = currentState;
+        for (int i = 0; i < transitions.size(); i++) {
+            Transition t = transitions.get(i);
+            if (t.getSymbol().equals(finalSymbol) && t.getCurrentState().equals(finalCurrentState)) {
+                transitions.remove(i);
+                i--; // dikkat: eleman silindiği için indeksi geri alıyoruz!
+            }
+        }
+
+        transitions.add(new Transition(symbol, currentState, nextState));
     }
 }
