@@ -112,7 +112,7 @@ public class FSM implements Serializable {
             return;
         }
 
-        // Eğer aynı symbol ve currentState varsa öncekini kaldır
+        // Eğer aynı symbol ve currentState varsa öncekiyi kaldır
         String finalSymbol = symbol;
         String finalCurrentState = currentState;
         for (int i = 0; i < transitions.size(); i++) {
@@ -124,5 +124,51 @@ public class FSM implements Serializable {
         }
 
         transitions.add(new Transition(symbol, currentState, nextState));
+    }
+	
+	public String execute(String input) {
+        if (initialState == null) {
+            System.out.println("Error: Initial state is not set.");
+            return "NO";
+        }
+        if (input == null) {
+            System.out.println("Error: Input cannot be null.");
+            return "NO";
+        }
+
+        String currentState = initialState;
+        System.out.print(currentState + " ");
+
+        for (char ch : input.toCharArray()) {
+            String symbol = String.valueOf(ch).toUpperCase();
+
+            if (!symbols.contains(symbol)) {
+                System.out.println("\nError: Invalid symbol '" + symbol + "' encountered.");
+                return "NO";
+            }
+
+            boolean found = false;
+            for (Transition t : transitions) {
+                if (t.getSymbol().equals(symbol) && t.getCurrentState().equals(currentState)) {
+                    currentState = t.getNextState();
+                    System.out.print(currentState + " ");
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                System.out.println("\nNo valid transition from state '" + currentState + "' using symbol '" + symbol + "'.");
+                return "NO";
+            }
+        }
+
+        if (finalStates.contains(currentState)) {
+            System.out.println("\nYES");
+            return "YES";
+        } else {
+            System.out.println("\nNO");
+            return "NO";
+        }
     }
 }
