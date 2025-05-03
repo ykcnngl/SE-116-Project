@@ -1,9 +1,3 @@
-package fsm.core;
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-
 public class FSM implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -171,4 +165,69 @@ public class FSM implements Serializable {
             return "NO";
         }
     }
-}
+	
+	public void print() {
+        System.out.println("SYMBOLS " + symbols);
+
+        System.out.print("STATES {");
+        boolean first = true;
+        for (String state : states) {
+            if (!first) System.out.print(", ");
+            System.out.print(state);
+            if (state.equals(initialState)) System.out.print(" (initial)");
+            if (finalStates.contains(state)) System.out.print(" (final)");
+            first = false;
+        }
+        System.out.println("}");
+
+        System.out.println("TRANSITIONS:");
+        for (Transition t : transitions) {
+            System.out.println(t);
+        }
+    }
+
+    public void printToFile(String filename) {
+        if (filename == null || filename.isEmpty()) {
+            System.out.println("Error: Invalid filename.");
+            return;
+        }
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            writer.write("SYMBOLS ");
+            for (String symbol : symbols) {
+                writer.write(symbol + " ");
+            }
+            writer.write(";\n");
+
+            writer.write("STATES ");
+            for (String state : states) {
+                writer.write(state + " ");
+            }
+            writer.write(";\n");
+
+            if (initialState != null) {
+                writer.write("INITIAL-STATE " + initialState + ";\n");
+            }
+
+            if (!finalStates.isEmpty()) {
+                writer.write("FINAL-STATES ");
+                for (String finalState : finalStates) {
+                    writer.write(finalState + " ");
+                }
+                writer.write(";\n");
+            }
+
+            writer.write("TRANSITIONS ");
+            boolean first = true;
+            for (Transition t : transitions) {
+                if (!first) writer.write(", ");
+                writer.write(t.getSymbol() + " " + t.getCurrentState() + " " + t.getNextState());
+                first = false;
+            }
+            writer.write(";\n");
+
+            System.out.println("FSM printed to file: '" + filename + "'");
+        } catch (IOException e) {
+            System.out.println("Error: Could not write FSM to file. " + e.getMessage());
+        }
+    }
+	}
