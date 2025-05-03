@@ -1,3 +1,10 @@
+package fsm.core;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;            
+import java.util.List;
+
 public class FSM implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -106,7 +113,7 @@ public class FSM implements Serializable {
             return;
         }
 
-        // Eğer aynı symbol ve currentState varsa öncekiyi kaldır
+        // Eğer aynı symbol ve currentState varsa öncekini kaldır
         String finalSymbol = symbol;
         String finalCurrentState = currentState;
         for (int i = 0; i < transitions.size(); i++) {
@@ -119,8 +126,8 @@ public class FSM implements Serializable {
 
         transitions.add(new Transition(symbol, currentState, nextState));
     }
-	
-	public String execute(String input) {
+    
+    public String execute(String input) {
         if (initialState == null) {
             System.out.println("Error: Initial state is not set.");
             return "NO";
@@ -165,8 +172,8 @@ public class FSM implements Serializable {
             return "NO";
         }
     }
-	
-	public void print() {
+
+    public void print() {
         System.out.println("SYMBOLS " + symbols);
 
         System.out.print("STATES {");
@@ -230,4 +237,23 @@ public class FSM implements Serializable {
             System.out.println("Error: Could not write FSM to file. " + e.getMessage());
         }
     }
-	}
+    public List<String> getSymbols() {
+        return Collections.unmodifiableList(symbols);
+    }
+
+    public List<String> getStates() {
+        return Collections.unmodifiableList(states);
+    }
+
+    public List<String> getFinalStates() {
+        return Collections.unmodifiableList(finalStates);
+    }
+
+    public String getInitialState() {
+        return initialState;
+    }
+
+    public List<Transition> getTransitions() {
+        return Collections.unmodifiableList(transitions);
+    }
+}
