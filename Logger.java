@@ -9,7 +9,7 @@ public class Logger {
     private boolean isLogging = false;
 
     public void startLogging(String filename) {       // Starts logging to the given filename.
-        stopLogging(); // varsa önceki logu kapat
+        stopLogging(); // Close previous log if any
         try {
             writer = new BufferedWriter(new FileWriter(filename, false)); // overwrite mode
             isLogging = true;
