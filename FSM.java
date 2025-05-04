@@ -237,6 +237,41 @@ public class FSM implements Serializable {
             System.out.println("Error: Could not write FSM to file. " + e.getMessage());
         }
     }
+    public void compileToFile(String filename) {
+        if (filename == null || filename.isEmpty()) {
+            System.out.println("Error: Invalid filename.");
+            return;
+        }
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
+            oos.writeObject(this);
+            System.out.println("Compile successful: FSM saved to '" + filename + "'");
+        } catch (IOException e) {
+            System.out.println("Error: Could not compile FSM to file. " + e.getMessage());
+        }
+    }
+
+    public void loadFromFile(String filename) {
+        if (filename == null || filename.isEmpty()) {
+            System.out.println("Error: Invalid filename.");
+            return;
+        }
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
+            FSM loaded = (FSM) ois.readObject();
+            this.symbols.clear();
+            this.symbols.addAll(loaded.symbols);
+            this.states.clear();
+            this.states.addAll(loaded.states);
+            this.finalStates.clear();
+            this.finalStates.addAll(loaded.finalStates);
+            this.transitions.clear();
+            this.transitions.addAll(loaded.transitions);
+            this.initialState = loaded.initialState;
+            System.out.println("Load successful: FSM loaded from '" + filename + "'");
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error: Could not load FSM from file. " + e.getMessage());
+        }
+    }
+    
     public List<String> getSymbols() {
         return Collections.unmodifiableList(symbols);
     }
