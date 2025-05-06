@@ -124,3 +124,21 @@ public class CommandParser {
         }
     }
 }
+private void handleTransitions(String[] tokens) {
+        String combined = String.join(" ", tokens);
+        combined = combined.substring("TRANSITIONS".length()).trim();
+        String[] transitions = combined.split(",");
+
+        for (String transition : transitions) {
+            String[] parts = transition.trim().split("\\s+");
+            if (parts.length != 3) {
+                System.out.println("Error: Invalid transition format.");
+                log("Error: Invalid transition format.");
+                continue;
+            }
+            String symbol = parts[0];
+            String fromState = parts[1];
+            String toState = parts[2];
+            fsm.addTransition(symbol, fromState, toState);
+        }
+    }
