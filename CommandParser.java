@@ -104,4 +104,23 @@ public class CommandParser {
             fsm.addState(tokens[i]);
         }
     }
+        private void handleInitialState(String[] tokens) {
+        if (tokens.length < 2) {
+            System.out.println("Error: No initial state specified.");
+            log("Error: No initial state specified.");
+            return;
+        }
+        fsm.setInitialState(tokens[1]);
+    }
+
+    private void handleFinalStates(String[] tokens) {
+        if (tokens.length < 2) {
+            System.out.println("Error: No final states specified.");
+            log("Error: No final states specified.");
+            return;
+        }
+        for (int i = 1; i < tokens.length; i++) {
+            fsm.addFinalState(tokens[i]);
+        }
+    }
 }
