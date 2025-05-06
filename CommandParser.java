@@ -82,4 +82,26 @@ public class CommandParser {
             log("Error processing command: " + e.getMessage());
         }
     }
+
+    private void handleSymbols(String[] tokens) {
+        if (tokens.length == 1) {
+            System.out.println("Declared symbols: " + fsm.getSymbols());
+            log("Declared symbols: " + fsm.getSymbols());
+            return;
+        }
+        for (int i = 1; i < tokens.length; i++) {
+            fsm.addSymbol(tokens[i]);
+        }
+    }
+
+    private void handleStates(String[] tokens) {
+        if (tokens.length == 1) {
+            System.out.println("Declared states: " + fsm.getStates());
+            log("Declared states: " + fsm.getStates());
+            return;
+        }
+        for (int i = 1; i < tokens.length; i++) {
+            fsm.addState(tokens[i]);
+        }
+    }
 }
