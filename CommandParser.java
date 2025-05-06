@@ -1,1 +1,85 @@
-Command Parser Class
+package fsm.core.io;
+import fsm.core.FSM;
+
+import java.io.*;
+public class CommandParser {
+    private final FSM fsm;
+    private final Logger logger;
+
+    public CommandParser(FSM fsm) {
+        this.fsm = fsm;
+        this.logger = new Logger();
+    }
+
+    public void parse(String commandLine) {
+        if (commandLine == null || commandLine.trim().isEmpty()) {
+            return;
+        }
+
+        int semicolonIndex = commandLine.indexOf(';');
+        if (semicolonIndex != -1) {
+            commandLine = commandLine.substring(0, semicolonIndex);
+        }
+        commandLine = commandLine.trim();
+        if (commandLine.isEmpty()) {
+            return;
+        }
+
+        log(commandLine);
+
+        String[] tokens = commandLine.split("\\s+");
+        String command = tokens[0].toUpperCase();
+
+        try {
+            switch (command) {
+                case "EXIT":
+                    log("TERMINATED BY USER");
+                    System.out.println("TERMINATED BY USER");
+                    System.exit(0);
+                    break;
+                case "SYMBOLS":
+                    handleSymbols(tokens);
+                    break;
+                case "STATES":
+                    handleStates(tokens);
+                    break;
+                case "INITIAL-STATE":
+                    handleInitialState(tokens);
+                    break;
+                case "FINAL-STATES":
+                    handleFinalStates(tokens);
+                    break;
+                case "TRANSITIONS":
+                    handleTransitions(tokens);
+                    break;
+                case "PRINT":
+                    handlePrint(tokens);
+                    break;
+                case "EXECUTE":
+                    handleExecute(tokens);
+                    break;
+                case "CLEAR":
+                    fsm.clear();
+                    log("FSM cleared.");
+                    System.out.println("FSM cleared.");
+                    break;
+                case "LOG":
+                    handleLog(tokens);
+                    break;
+                case "COMPILE":
+                    handleCompile(tokens);
+                    break;
+                case "LOAD":
+                    handleLoad(tokens);
+                    break;
+                default:
+                    System.out.println("Warning: Invalid command '" + command + "'");
+                    log("Warning: Invalid command '" + command + "'");
+                    break;
+            }
+        } catch (Exception e) {
+            System.out.println("Error processing command: " + e.getMessage());
+            log("Error processing command: " + e.getMessage());
+        }
+    }
+}
