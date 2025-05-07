@@ -181,3 +181,51 @@ private void handleLog(String[] tokens) {
         }
         fsm.compileToFile(tokens[1]);
     }
+private void handleLoad(String[] tokens) {
+        if (tokens.length < 2) {
+            System.out.println("Error: No filename provided for load.");
+            log("Error: No filename provided for load.");
+            return;
+        }
+
+        String filename = tokens[1].trim().toLowerCase();
+
+        // Binary dosyaları .ser veya .fs uzantılarına göre ayırt et
+        if (filename.endsWith(".ser") || filename.endsWith(".fs")) {
+            fsm.loadFromFile(filename);  // FSM içindeki ObjectInputStream ile okuma
+        } else {
+            try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+                StringBuilder commandBuffer = new StringBuilder();
+                String line;
+                int lineNumber = 0;
+                while ((line = reader.readLine()) != null) {
+                    lineNumber++;
+                    line = line.trim();
+                    if (line.startsWith(";") || line.isEmpty()) {
+                        continue;
+                    }
+                    commandBuffer.append(line).append(" ");
+                    if (line.contains(";")) {
+                        String fullCommand = commandBuffer.toString();
+                        try {
+                            parse(fullCommand);
+                        } catch (Exception e) {
+                            System.out.println("Error processing command at line " + lineNumber + ": " + e.getMessage());
+                            log("Error processing command at line " + lineNumber + ": " + e.getMessage());
+                        }
+                        commandBuffer.setLength(0);
+                    }
+                }
+                System.out.println("Load successful: Commands loaded from '" + filename + "'");
+            } catch (IOException e) {
+                System.out.println("Error: Could not load commands from text file. " + e.getMessage());
+            }
+        }
+   }
+
+    private void log(String message) {
+        if (logger.isLogging()) {
+            logger.log(message);
+        }
+    }
+}
