@@ -141,4 +141,14 @@ private void handleTransitions(String[] tokens) {
             String toState = parts[2];
             fsm.addTransition(symbol, fromState, toState);
         }
+
+    private void handleExecute(String[] tokens) {
+        if (tokens.length < 2) {
+            System.out.println("Error: No input string provided for execution.");
+            log("Error: No input string provided for execution.");
+            return;
+        }
+        fsm.execute(tokens[1]);
+    }
+
     }
