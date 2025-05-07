@@ -160,3 +160,24 @@ private void handleTransitions(String[] tokens) {
     }
 
     }
+private void handleLog(String[] tokens) {
+        if (tokens.length == 1) {
+            if (logger.isLogging()) {
+                logger.stopLogging();
+                System.out.println("STOPPED LOGGING");
+            } else {
+                System.out.println("LOGGING was not enabled");
+            }
+        } else {
+            logger.startLogging(tokens[1]);
+        }
+    }
+
+    private void handleCompile(String[] tokens) {
+        if (tokens.length < 2) {
+            System.out.println("Error: No filename provided for compile.");
+            log("Error: No filename provided for compile.");
+            return;
+        }
+        fsm.compileToFile(tokens[1]);
+    }
