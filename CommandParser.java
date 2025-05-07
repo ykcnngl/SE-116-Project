@@ -151,4 +151,12 @@ private void handleTransitions(String[] tokens) {
         fsm.execute(tokens[1]);
     }
 
+     private void handlePrint(String[] tokens) {
+        if (tokens.length == 1) {
+            fsm.print();
+        } else {
+            fsm.printToFile(tokens[1]);
+        }
+    }
+
     }
