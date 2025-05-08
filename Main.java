@@ -5,7 +5,7 @@ public class Main {
     public static void main(String[] args) {
 
         // VERSION NO
-        String versionNo = "FSM v1.0.0";
+        String versionNo = "FSM v2.0.0";
 
         // DATE TIME
         LocalDateTime now = LocalDateTime.now();
